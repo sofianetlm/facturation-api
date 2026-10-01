@@ -9,6 +9,7 @@ use App\Filament\Resources\Clients\Pages\ViewClient;
 use App\Filament\Resources\Clients\Schemas\ClientForm;
 use App\Filament\Resources\Clients\Schemas\ClientInfolist;
 use App\Filament\Resources\Clients\Tables\ClientsTable;
+use Illuminate\Database\Eloquent\Builder;
 use App\Models\Client;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -55,4 +56,8 @@ class ClientResource extends Resource
             'edit' => EditClient::route('/{record}/edit'),
         ];
     }
+	public static function getEloquentQuery(): Builder
+	{
+    return parent::getEloquentQuery()->where('user_id', auth()->id());
+	}
 }

@@ -15,26 +15,10 @@ class ClientsTable
     {
         return $table
             ->columns([
-                TextColumn::make('user.name')
-                    ->searchable(),
-                TextColumn::make('name')
-                    ->searchable(),
-                TextColumn::make('email')
-                    ->label('Email address')
-                    ->searchable(),
-                TextColumn::make('phone')
-                    ->searchable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-            ])
-            ->filters([
-                //
+                TextColumn::make('name')->label('Nom')->searchable()->sortable(),
+                TextColumn::make('email')->label('E-mail')->searchable(),
+                TextColumn::make('phone')->label('Téléphone'),
+                TextColumn::make('invoices_count')->counts('invoices')->label('Factures'),
             ])
             ->recordActions([
                 ViewAction::make(),
