@@ -1,4 +1,4 @@
-# API de facturation (Laravel 12)
+# API de facturation (Laravel 13)
 
 API REST et back-office de gestion de clients et de factures, construits avec Laravel, Sanctum, Filament et MySQL.
 Chaque utilisateur ne peut accéder qu'à ses propres données.
