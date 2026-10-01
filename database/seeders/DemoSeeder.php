@@ -13,7 +13,7 @@ class DemoSeeder extends Seeder
         $user = User::create([
             'name' => 'Demo',
             'email' => 'demo@example.com',
-            'password' => Hash::make('password'),
+            'password' => 'password',
         ]);
 
         $clients = [
