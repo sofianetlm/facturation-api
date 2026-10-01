@@ -15,32 +15,30 @@ class InvoicesTable
     {
         return $table
             ->columns([
-                TextColumn::make('client.name')
-                    ->searchable(),
-                TextColumn::make('number')
-                    ->searchable(),
-                TextColumn::make('issued_at')
-                    ->date()
-                    ->sortable(),
-                TextColumn::make('due_at')
-                    ->date()
-                    ->sortable(),
+                TextColumn::make('number')->label('Numéro')->searchable()->sortable(),
+                TextColumn::make('client.name')->label('Client')->searchable(),
                 TextColumn::make('status')
-                    ->searchable(),
-                TextColumn::make('currency')
-                    ->searchable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->label('Statut')
+                    ->badge()
+                    ->formatStateUsing(fn (string $state) => match ($state) {
+                        'draft' => 'Brouillon',
+                        'sent' => 'Envoyée',
+                        'paid' => 'Payée',
+                        default => $state,
+                    })
+                    ->color(fn (string $state) => match ($state) {
+                        'paid' => 'success',
+                        'sent' => 'warning',
+                        default => 'gray',
+                    }),
+                TextColumn::make('total')
+                    ->label('Total')
+                    ->state(fn ($record) => $record->total / 100)
+                    ->money('EUR'),
+                TextColumn::make('issued_at')->label('Émise le')->date('d/m/Y')->sortable(),
+                TextColumn::make('due_at')->label('Échéance')->date('d/m/Y'),
             ])
-            ->filters([
-                //
-            ])
+            ->defaultSort('issued_at', 'desc')
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
