@@ -1,58 +1,87 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# API de facturation (Laravel 12)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+API REST de gestion de clients et de factures, construite avec Laravel, Sanctum et MySQL.
+Chaque utilisateur ne peut accéder qu'à ses propres données.
 
-## About Laravel
+## Points techniques
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Authentification par jetons (Laravel Sanctum)
+- Isolation des données entre utilisateurs (un client ou une facture d'un autre utilisateur renvoie 404)
+- Montants stockés en **centimes** (entiers) pour éviter les erreurs d'arrondi
+- Création de facture et de ses lignes dans une **transaction**
+- Validation des entrées et réponses JSON via des API Resources
+- Pagination des listes
+- 15 tests automatisés (PHPUnit), dont les tests de sécurité entre utilisateurs
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Installation
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+Prérequis : PHP 8.4+, Composer, MySQL.
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone https://github.com/[votre-utilisateur]/facturation-api.git
+cd facturation-api
+composer install
+cp .env.example .env
+php artisan key:generate
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Créez une base `facturation`, configurez `.env`, puis :
 
-## Contributing
+```bash
+php artisan migrate --seed --seeder=DemoSeeder
+php artisan serve
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Compte de démonstration : `demo@example.com` / `password`
 
-## Code of Conduct
+## Tests
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+php artisan test
+```
 
-## Security Vulnerabilities
+## Endpoints
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Toutes les routes, sauf `register` et `login`, exigent l'en-tête `Authorization: Bearer <token>`.
+Ajoutez toujours `Accept: application/json`.
 
-## License
+| Méthode | Route | Description |
+|---|---|---|
+| POST | `/api/register` | Inscription |
+| POST | `/api/login` | Connexion, renvoie un jeton |
+| POST | `/api/logout` | Déconnexion |
+| GET | `/api/me` | Utilisateur connecté |
+| GET, POST | `/api/clients` | Lister, créer des clients |
+| GET, PUT, DELETE | `/api/clients/{id}` | Voir, modifier, supprimer un client |
+| GET, POST | `/api/invoices` | Lister (filtre `?status=`), créer des factures |
+| GET, PATCH, DELETE | `/api/invoices/{id}` | Voir, modifier le statut, supprimer |
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Exemple : créer une facture
+
+```bash
+curl -X POST http://127.0.0.1:8000/api/invoices \
+  -H "Accept: application/json" \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "client_id": 1,
+    "issued_at": "2026-10-01",
+    "items": [
+      {"description": "Audit du code", "quantity": 2, "unit_price": 30000}
+    ]
+  }'
+```
+
+Réponse (extrait) : `"status": "draft"`, `"total": 60000` (soit 600,00 €).
+
+## Pistes d'amélioration
+
+- Numérotation des factures par séquence et par utilisateur
+- Export PDF des factures
+- Documentation OpenAPI
+- Interface d'administration (Filament)
+
+## Auteur
+
+[Votre nom], développeur Laravel, disponible pour des missions en sous-traitance (français, arabe).
+Contact : [votre email ou lien LinkedIn]
