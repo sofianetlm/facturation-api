@@ -61,4 +61,14 @@ class InvoiceResource extends Resource
     return parent::getEloquentQuery()
         ->whereHas('client', fn (Builder $query) => $query->where('user_id', auth()->id()));
 	}
+
+	public static function getModelLabel(): string
+	{
+		return __('app.invoice');
+	}
+
+	public static function getPluralModelLabel(): string
+	{
+		return __('app.invoices');
+	}	
 }

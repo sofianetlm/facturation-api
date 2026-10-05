@@ -60,4 +60,13 @@ class ClientResource extends Resource
 	{
     return parent::getEloquentQuery()->where('user_id', auth()->id());
 	}
+	public static function getModelLabel(): string
+	{
+    return __('app.client');
+	}
+
+	public static function getPluralModelLabel(): string
+	{
+    return __('app.clients');
+	}	
 }
