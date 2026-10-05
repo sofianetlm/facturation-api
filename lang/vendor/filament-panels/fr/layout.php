@@ -59,8 +59,8 @@ return [
     'logo' => [
         'alt' => 'Logo de :name',
     ],
-
-];
-'skip_to_content' => [
+	'skip_to_content' => [
     'label' => 'Aller au contenu principal',
 ],
+
+];
