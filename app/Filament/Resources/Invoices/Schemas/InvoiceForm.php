@@ -15,7 +15,7 @@ class InvoiceForm
     {
         return $schema->components([
             Select::make('client_id')
-                ->label('Client')
+                ->label(__('app.client_field'))
                 ->relationship(
                     name: 'client',
                     titleAttribute: 'name',
@@ -26,26 +26,26 @@ class InvoiceForm
                 ->required(),
 
             Select::make('status')
-                ->label('Statut')
+                ->label(__('app.status'))
                 ->options([
-                    'draft' => 'Brouillon',
-                    'sent' => 'Envoyée',
-                    'paid' => 'Payée',
+                    'draft' => __('app.draft'),
+                    'sent' => __('app.sent'),
+                    'paid' => __('app.paid'),
                 ])
                 ->default('draft')
                 ->required(),
 
-            DatePicker::make('issued_at')->label('Date d\'émission')->default(now())->required(),
-            DatePicker::make('due_at')->label('Échéance'),
+            DatePicker::make('issued_at')->label(__('app.issued_at'))->default(now())->required(),
+            DatePicker::make('due_at')->label(__('app.due_at')),
 
             Repeater::make('items')
-                ->label('Lignes de facture')
+                ->label(__('app.items'))
                 ->relationship()
                 ->schema([
-                    TextInput::make('description')->label('Description')->required()->columnSpan(2),
-                    TextInput::make('quantity')->label('Quantité')->numeric()->integer()->minValue(1)->default(1)->required(),
+                    TextInput::make('description')->label(__('app.description'))->required()->columnSpan(2),
+                    TextInput::make('quantity')->label(__('app.quantity'))->numeric()->integer()->minValue(1)->default(1)->required(),
                     TextInput::make('unit_price')
-                        ->label('Prix unitaire (€)')
+                        ->label(__('app.unit_price'))
                         ->numeric()
                         ->minValue(0)
                         ->step(0.01)
@@ -57,7 +57,7 @@ class InvoiceForm
                 ->columns(4)
                 ->minItems(1)
                 ->defaultItems(1)
-                ->addActionLabel('Ajouter une ligne')
+                ->addActionLabel(__('app.add_item'))
                 ->columnSpanFull(),
         ]);
     }

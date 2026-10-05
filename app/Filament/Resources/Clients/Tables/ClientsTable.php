@@ -15,10 +15,10 @@ class ClientsTable
     {
         return $table
             ->columns([
-                TextColumn::make('name')->label('Nom')->searchable()->sortable(),
-                TextColumn::make('email')->label('E-mail')->searchable(),
-                TextColumn::make('phone')->label('Téléphone'),
-                TextColumn::make('invoices_count')->counts('invoices')->label('Factures'),
+                TextColumn::make('name')->label(__('app.name'))->searchable()->sortable(),
+                TextColumn::make('email')->label(__('app.email'))->searchable(),
+                TextColumn::make('phone')->label(__('app.phone')),
+                TextColumn::make('invoices_count')->counts('invoices')->label(__('app.invoices_count')),
             ])
             ->recordActions([
                 ViewAction::make(),

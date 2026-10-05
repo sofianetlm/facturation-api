@@ -11,10 +11,10 @@ class ClientForm
     public static function configure(Schema $schema): Schema
     {
         return $schema->components([
-            TextInput::make('name')->label('Nom')->required()->maxLength(255),
-            TextInput::make('email')->label('E-mail')->email()->maxLength(255),
-            TextInput::make('phone')->label('Téléphone')->tel()->maxLength(50),
-            Textarea::make('address')->label('Adresse')->columnSpanFull(),
+            TextInput::make('name')->label(__('app.name'))->required()->maxLength(255),
+            TextInput::make('email')->label(__('app.email'))->email()->maxLength(255),
+            TextInput::make('phone')->label(__('app.phone'))->tel()->maxLength(50),
+            Textarea::make('address')->label(__('app.address'))->columnSpanFull(),
         ]);
     }
 }

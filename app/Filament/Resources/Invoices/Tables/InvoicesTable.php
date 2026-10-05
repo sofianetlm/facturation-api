@@ -15,15 +15,15 @@ class InvoicesTable
     {
         return $table
             ->columns([
-                TextColumn::make('number')->label('Numéro')->searchable()->sortable(),
-                TextColumn::make('client.name')->label('Client')->searchable(),
+                TextColumn::make('number')->label(__('app.number'))->searchable()->sortable(),
+                TextColumn::make('client.name')->label(__('app.client_field'))->searchable(),
                 TextColumn::make('status')
-                    ->label('Statut')
+                    ->label(__('app.status'))
                     ->badge()
                     ->formatStateUsing(fn (string $state) => match ($state) {
-                        'draft' => 'Brouillon',
-                        'sent' => 'Envoyée',
-                        'paid' => 'Payée',
+                        'draft' => __('app.draft'),
+                        'sent' => __('app.sent'),
+                        'paid' => __('app.paid'),
                         default => $state,
                     })
                     ->color(fn (string $state) => match ($state) {
@@ -32,11 +32,11 @@ class InvoicesTable
                         default => 'gray',
                     }),
                 TextColumn::make('total')
-                    ->label('Total')
+                    ->label(__('app.total'))
                     ->state(fn ($record) => $record->total / 100)
                     ->money('EUR'),
-                TextColumn::make('issued_at')->label('Émise le')->date('d/m/Y')->sortable(),
-                TextColumn::make('due_at')->label('Échéance')->date('d/m/Y'),
+                TextColumn::make('issued_at')->label(__('app.issued_on'))->date('d/m/Y')->sortable(),
+                TextColumn::make('due_at')->label(__('app.due_at'))->date('d/m/Y'),
             ])
             ->defaultSort('issued_at', 'desc')
             ->recordActions([
