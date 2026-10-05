@@ -30,6 +30,10 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->brandName('Facturation')
+            ->brandLogo(asset('images/logo.svg'))
+            ->brandLogoHeight('2.25rem')
+            ->favicon(asset('images/logo.svg'))
             ->colors([
                 'primary' => Color::Amber,
             ])

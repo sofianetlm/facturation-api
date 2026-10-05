@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="220" height="48" viewBox="0 0 220 48">
+  <rect x="2" y="4" width="40" height="40" rx="10" fill="#f59e0b"/>
+  <path d="M14 14h16a2 2 0 0 1 2 2v18l-4-3-4 3-4-3-4 3V16a2 2 0 0 1 2-2z" fill="#ffffff"/>
+  <rect x="17" y="19" width="12" height="2.5" rx="1.2" fill="#f59e0b"/>
+  <rect x="17" y="25" width="8" height="2.5" rx="1.2" fill="#f59e0b"/>
+  <text x="52" y="32" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#6b7280">Facturation</text>
+</svg>
